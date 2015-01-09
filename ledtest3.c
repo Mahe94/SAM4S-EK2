@@ -50,7 +50,6 @@
  * \section files Main Files
  *  - ioport.h common gpio definitions
  *  - ioport_example3.c example application
- *  - conf_example.h example definitions
  *
  * \section ioport_service_section services/ioport/ioport.h
  * The common IOPORT service is described in
