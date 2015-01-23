@@ -218,32 +218,45 @@ int main(void)
 			goto main_end_of_test;
 		}
 		printf("[OK]\r\n");
-**/
+**/		
 		f_mkdir((const TCHAR *)"New");
 		f_mkdir((const TCHAR *)"New/new");
 		
 		TCHAR path[100];
+		memset(path,0,100);
 //		f_unlink((const TCHAR *)"New/new");
 		
-		f_getcwd(path, 100);
+		res = f_getcwd(path, 100);
 //		ili93xx_draw_string(5, 20, (const uint8_t *)"First");
 		ili93xx_draw_string(5, 30, (const uint8_t *)path);
 		
-		DIR *dj;
-		res = f_opendir(dj, (const TCHAR *)"/New/new");
+		DIR dj;
+		memset(&dj,0,sizeof(dj));
+		const TCHAR npath[100] = "0:/New";
+		dj.fs = &fs;
+		res = f_opendir(&dj, npath);
 		if(res == FR_OK)
 			ili93xx_draw_string(5, 57, (const uint8_t *)"opendir");
 		
-///		FILINFO *f;
-//		res = f_readdir(dj, f);
-//		ili93xx_draw_string(5, 40, (const uint8_t *)"Second");	
-//		if(res == FR_OK)	
-//			ili93xx_draw_string(5, 57, (const uint8_t *)"readdir");
+		FILINFO f;
+		memset(&f,0,sizeof(f));
+		if((res = f_readdir(&dj, &f)) != FR_OK);
+		ili93xx_draw_string(5, 80, (const uint8_t *)"Second");	
+		if(res == FR_OK)	
+			ili93xx_draw_string(5,117, (const uint8_t *)f.fname);
+		memset(&f,0,sizeof(f));
+		if((res = f_readdir(&dj, &f)) != FR_OK);
+		if(res == FR_OK)
+		ili93xx_draw_string(5,147, (const uint8_t *)f.fname);
+		memset(&f,0,sizeof(f));
+		if((res = f_readdir(&dj, &f)) != FR_OK);
+		if(res == FR_OK)
+		ili93xx_draw_string(5,177, (const uint8_t *)f.fname);
 //		f_chdir((const TCHAR *)"NEW");
 //		f_getcwd(path, 100);
 //		f_mkdir((const TCHAR *)"Hello");
 //		ili93xx_draw_string(5, 57, (const uint8_t *)path);
-		ili93xx_draw_string(5, 87, (const uint8_t *)"HELLO");
+//		ili93xx_draw_string(5, 147, (const uint8_t *)"HELLO");
 		
 //		f_close(&file_object);
 //		printf("Test is successful.\n\r");
